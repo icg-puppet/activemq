@@ -50,8 +50,6 @@ define activemq::user ($password, $username=$title,
   validate_string($configfile)
   validate_array($groups)
 
-  alert("title: ${$title} username: ${$username} password: ${$password} credentials: ${$credentials} configfile: ${$configfile} groups: ${$groups}")
-
   # Fragment for credentials file
   datacat_fragment{"credentials_${username}":
     target => $credentials,
