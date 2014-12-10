@@ -125,7 +125,16 @@ class activemq  (
   $amqgroup               = $activemq::params::amqgroup,
   $amqfilelimit           = $activemq::params::amqfilelimit,
   $amqproclimit           = $activemq::params::amqproclimit,
-  $amqbrokername          = $activemq::params::amqbrokername
+  $amqbrokername          = $activemq::params::amqbrokername,
+
+
+  ### Begin Hiera Resources ###
+  $activemq_users         = {},
+  $activemq_auths         = {},
+  $activemq_transports    = {},
+  $activemq_policies      = {}
+  ### End Hiera Resources ###
+
 
 ) inherits activemq::params {
 
@@ -150,6 +159,12 @@ class activemq  (
       validate_string($key)
       validate_string($cert)
     }
+
+    #create resources from hiera variables, FIXME add other dynamic resources like networks
+    create_resources('::activemq::user', $activemq_users)
+    create_resources('::activemq::auth', $activemq_auths)
+    create_resources('::activemq::transport', $activemq_transports)
+    create_resources('::activemq::policy', $activemq_policies)
 
     anchor {'activemq::begin': } ->
     class{'activemq::install': } ->
